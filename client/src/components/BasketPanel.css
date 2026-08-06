@@ -1,0 +1,94 @@
+.basket {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  /* Follows the listing on wide screens; the grid below drops it back into
+     flow on narrow ones where sticky would eat the viewport. */
+  position: sticky;
+  top: var(--space-4);
+}
+
+.basket__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 1.125rem;
+}
+
+.basket__count {
+  display: grid;
+  place-items: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 var(--space-1);
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.basket__empty {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.basket__lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.basket__summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  font-weight: 600;
+}
+
+.basket__total {
+  margin: 0;
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.basket__error {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  background-color: var(--color-bg);
+  color: var(--color-danger);
+  font-size: 0.8125rem;
+}
+
+.basket__purchase {
+  padding: var(--space-3) var(--space-4);
+  border: none;
+  border-radius: var(--radius);
+  background-color: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-weight: 600;
+}
+
+.basket__purchase:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+@media (max-width: 60rem) {
+  .basket {
+    position: static;
+    view-timeline-name: --basket-visibility;
+    scroll-margin-top: var(--space-4);
+  }
+}

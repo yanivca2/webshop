@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import BasketPanel from './components/BasketPanel';
 import ProductFilters from './components/ProductFilters';
 import ProductGrid from './components/ProductGrid';
 import { useCategories } from './hooks/useCategories';
@@ -35,32 +36,36 @@ export default function App() {
         <p className="app__subtitle">Tech and electronics, served by Spring Boot.</p>
       </header>
 
-      <main className="app__main">
-        <ProductFilters
-          categories={categories.data ?? []}
-          // A failed category list is its own problem, not an empty catalog:
-          // without these the dropdown would open on "No categories match
-          // that." and never say the request had failed.
-          categoriesPending={categories.isPending}
-          categoriesFailed={categories.isError}
-          onRetryCategories={() => void categories.refetch()}
-          applied={appliedFilters}
-          isApplying={isApplying}
-          onApply={setAppliedFilters}
-        />
+      <div className="app__layout">
+        <main className="app__listing">
+          <ProductFilters
+            categories={categories.data ?? []}
+            // A failed category list is its own problem, not an empty catalog:
+            // without these the dropdown would open on "No categories match
+            // that." and never say the request had failed.
+            categoriesPending={categories.isPending}
+            categoriesFailed={categories.isError}
+            onRetryCategories={() => void categories.refetch()}
+            applied={appliedFilters}
+            isApplying={isApplying}
+            onApply={setAppliedFilters}
+          />
 
-        <ProductGrid
-          products={products.data}
-          // TanStack does not create a request when offline, and there's no
-          // explicit "offline" state. We assume offline by the fetch status.
-          isOffline={products.fetchStatus === 'paused'}
-          isPending={products.isPending}
-          isError={products.isError}
-          error={products.error}
-          isFiltered={isFiltered}
-          onRetry={() => void products.refetch()}
-        />
-      </main>
+          <ProductGrid
+            products={products.data}
+            // TanStack does not create a request when offline, and there's no
+            // explicit "offline" state. We assume offline by the fetch status.
+            isOffline={products.fetchStatus === 'paused'}
+            isPending={products.isPending}
+            isError={products.isError}
+            error={products.error}
+            isFiltered={isFiltered}
+            onRetry={() => void products.refetch()}
+          />
+        </main>
+
+        <BasketPanel />
+      </div>
     </div>
   );
 }
