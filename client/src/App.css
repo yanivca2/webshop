@@ -17,11 +17,6 @@
   color: var(--color-text-muted);
 }
 
-.app__subtitle code {
-  font-family: var(--font-mono);
-  font-size: 0.9em;
-}
-
 .app__main {
   display: flex;
   flex-direction: column;

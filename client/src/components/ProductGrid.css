@@ -1,0 +1,81 @@
+.grid-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  /* Lets a list-mode ProductItem collapse to a stacked layout once *this
+     panel* gets narrow (e.g. the basket squeezing the listing column),
+     independent of the viewport width. */
+  container-type: inline-size;
+  container-name: grid-panel;
+}
+
+.grid-panel__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.grid-panel__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.grid-panel__title {
+  font-size: 1.125rem;
+}
+
+.grid-panel__count {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.grid-panel__offline {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-warning-border);
+  border-radius: var(--radius);
+  background-color: var(--color-warning-surface);
+  color: var(--color-warning);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-4);
+}
+
+.grid--cards {
+  /* Each track is at least 15rem and the browser fits as many as the container
+     holds, so the column count follows the width on its own - a fixed count
+     would need a media query per step. */
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+}
+
+.grid--list {
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+.grid__skeleton {
+  height: 22rem;
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  animation: grid-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes grid-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}

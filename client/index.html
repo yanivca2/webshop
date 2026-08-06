@@ -4,9 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fullstack App</title>
+    <!-- Initial inline style to show a loading message before the application loads. -->
+    <style>
+      body {
+        margin: 0;
+        background-color: #f6f7f9;
+        color: #1b1f24;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      .app-shell {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        color: #5b6472;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #14171c;
+          color: #e8eaee;
+        }
+
+        .app-shell {
+          color: #9aa4b2;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- This will be removed once executing `createRoot()`. -->
+      <p class="app-shell">Loading...</p>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
