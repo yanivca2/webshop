@@ -1,0 +1,27 @@
+{
+  "name": "fullstack",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "workspaces": [
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently -n client,server -c cyan,magenta \"npm run dev -w client\" \"npm run dev:server\"",
+    "dev:client": "npm run dev -w client",
+    "dev:server": "cd server && ./gradlew bootRun",
+    "build": "npm run build -w client && npm run build:server",
+    "build:server": "cd server && ./gradlew build",
+    "lint": "npm run lint -w client && npm run lint:server",
+    "lint:server": "cd server && ./gradlew ktlintCheck",
+    "typecheck": "npm run typecheck -w client",
+    "test": "npm run test -w client && npm run test:server",
+    "test:server": "cd server && ./gradlew test",
+    "format": "prettier --write \"client/**/*.{ts,tsx,css,html,json}\" \"*.{json,md}\" && cd server && ./gradlew ktlintFormat",
+    "clean": "rm -rf client/dist client/node_modules/.vite && cd server && ./gradlew clean"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "prettier": "^3.5.3"
+  }
+}

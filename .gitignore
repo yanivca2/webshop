@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.vite/
+coverage/
+
+# Gradle / JVM
+server/build/
+server/.gradle/
+server/out/
+*.class
+
+# Editors & OS
+.idea/
+.vscode/
+.DS_Store
+*.log
+
+# Claude Code - local agent config, never committed
+.claude/
+CLAUDE.md
+.mcp.json
