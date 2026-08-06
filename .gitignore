@@ -3,10 +3,11 @@ dist/
 .vite/
 coverage/
 
-# Gradle / JVM
-server/build/
-server/.gradle/
-server/out/
+# Gradle / JVM - build output and tool caches, regenerated on every build
+build/
+.gradle/
+.kotlin/
+out/
 *.class
 
 # Editors & OS

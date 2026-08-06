@@ -16,6 +16,13 @@ kotlin {
     }
 }
 
+ktlint {
+    // The version bundled with plugin 12.1.2 predates Kotlin 2.1 and cannot parse
+    // its syntax - it fails on .kts files with a missing KtTokens.HEADER_KEYWORD.
+    // 1.5.0 is the first release that understands the 2.1 grammar.
+    version.set("1.5.0")
+}
+
 repositories {
     mavenCentral()
 }
