@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useBasketStore } from '../basket/basketStore';
 import ProductItem from './ProductItem';
 import { renderWithProviders, testProduct } from '../test/renderWithProviders';
@@ -20,10 +20,10 @@ function seedBasket(quantity: number) {
   });
 }
 
-function renderItem() {
+function renderItem(onOpenDetail = vi.fn()) {
   return renderWithProviders(
     <ul>
-      <ProductItem product={testProduct} viewMode="cards" />
+      <ProductItem product={testProduct} viewMode="cards" onOpenDetail={onOpenDetail} />
     </ul>,
   );
 }
@@ -39,7 +39,7 @@ describe('ProductItem', () => {
   it('shows the name, price, description, brand, category and image', () => {
     renderItem();
 
-    expect(screen.getByRole('heading', { name: 'Sony WH-1000XM5' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Sony WH-1000XM5' })).toBeInTheDocument();
     expect(screen.getByText('$279.99')).toBeInTheDocument();
     expect(screen.getByText('Industry-leading noise cancelling.')).toBeInTheDocument();
     // Brand and category are separate elements; the dot between them is CSS.
@@ -60,6 +60,16 @@ describe('ProductItem', () => {
     expect(useBasketStore.getState().items[testProduct.id]?.quantity).toBe(1);
   });
 
+  it('opens the detail view from the product title', async () => {
+    const user = userEvent.setup();
+    const onOpenDetail = vi.fn();
+    renderItem(onOpenDetail);
+
+    await user.click(screen.getByRole('button', { name: 'Sony WH-1000XM5' }));
+
+    expect(onOpenDetail).toHaveBeenCalledWith('1');
+  });
+
   it('reports how many are already in the basket', () => {
     seedBasket(2);
     renderItem();
@@ -78,7 +88,11 @@ describe('ProductItem', () => {
   it("shows an 'Out of stock' message when the product inital amount is 0", () => {
     renderWithProviders(
       <ul>
-        <ProductItem product={{ ...testProduct, stock: 0 }} viewMode="cards" />
+        <ProductItem
+          product={{ ...testProduct, stock: 0 }}
+          viewMode="cards"
+          onOpenDetail={vi.fn()}
+        />
       </ul>,
     );
 

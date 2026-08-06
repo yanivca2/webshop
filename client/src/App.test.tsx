@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
 import { createTestQueryClient, testProduct } from './test/renderWithProviders';
@@ -42,7 +42,33 @@ describe('App', () => {
 
     renderApp();
 
-    expect(await screen.findByRole('heading', { name: 'Sony WH-1000XM5' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: 'Sony WH-1000XM5' })).toBeInTheDocument();
     expect(screen.getByText('2 products')).toBeInTheDocument();
+  });
+
+  it('opens the detail dialog straight from a deep-linked hash', async () => {
+    window.history.replaceState(null, '', '/#product=1');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((input: RequestInfo | URL) => {
+        const url = String(input);
+        if (url.includes('/api/products/1')) {
+          return Promise.resolve(
+            new Response(JSON.stringify(testProduct), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' },
+            }),
+          );
+        }
+        return Promise.resolve(routeFetch(url));
+      }),
+    );
+
+    renderApp();
+
+    // Scoped to the dialog: the card title is also a heading with this name.
+    const dialog = await screen.findByRole('dialog');
+    expect(await within(dialog).findByRole('heading', { name: 'Sony WH-1000XM5' })).toBeVisible();
+    expect(within(dialog).getByText('$279.99')).toBeInTheDocument();
   });
 });

@@ -15,6 +15,7 @@ interface ProductGridProps {
   // True when filters are active, which changes what "no results" means.
   isFiltered: boolean;
   onRetry: () => void;
+  onOpenDetail: (productId: string) => void;
 }
 
 export default function ProductGrid({
@@ -25,6 +26,7 @@ export default function ProductGrid({
   isOffline,
   isFiltered,
   onRetry,
+  onOpenDetail,
 }: ProductGridProps) {
   const [viewMode, setViewMode] = useViewMode();
   const resultCount = products?.length;
@@ -70,7 +72,12 @@ export default function ProductGrid({
     content = (
       <ul className={`grid grid--${viewMode}`}>
         {products.map((product) => (
-          <ProductItem key={product.id} product={product} viewMode={viewMode} />
+          <ProductItem
+            key={product.id}
+            product={product}
+            viewMode={viewMode}
+            onOpenDetail={onOpenDetail}
+          />
         ))}
       </ul>
     );

@@ -57,6 +57,7 @@ function renderShop(product: Product) {
         isFiltered={false}
         isOffline={false}
         onRetry={vi.fn()}
+        onOpenDetail={vi.fn()}
       />
       <BasketPanel />
     </>,

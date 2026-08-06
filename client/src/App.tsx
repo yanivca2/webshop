@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import BasketPanel from './components/BasketPanel';
+import ProductDetailDialog from './components/ProductDetailDialog';
 import ProductFilters from './components/ProductFilters';
 import ProductGrid from './components/ProductGrid';
 import { useCategories } from './hooks/useCategories';
+import { useHashProductId } from './hooks/useHashProductId';
 import { useProducts, type ProductFilters as ProductQueryFilters } from './hooks/useProducts';
 import './App.css';
 
@@ -13,6 +15,13 @@ export default function App() {
     search: '',
     categories: [],
   });
+
+  const [detailProductId, setDetailProductId] = useHashProductId();
+
+  // Stable, because the dialog subscribes to its own close event with this in
+  // the dependency array - a fresh arrow every render would tear that listener
+  // down and re-add it on every unrelated render of this component.
+  const closeDetail = useCallback(() => setDetailProductId(null), [setDetailProductId]);
 
   const products = useProducts(appliedFilters);
   const categories = useCategories();
@@ -61,11 +70,14 @@ export default function App() {
             error={products.error}
             isFiltered={isFiltered}
             onRetry={() => void products.refetch()}
+            onOpenDetail={setDetailProductId}
           />
         </main>
 
         <BasketPanel />
       </div>
+
+      <ProductDetailDialog productId={detailProductId} onClose={closeDetail} />
     </div>
   );
 }

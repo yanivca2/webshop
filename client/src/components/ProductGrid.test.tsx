@@ -21,6 +21,7 @@ function renderGrid(props: Partial<ComponentProps<typeof ProductGrid>> = {}) {
       isOffline={false}
       isFiltered={false}
       onRetry={vi.fn()}
+      onOpenDetail={vi.fn()}
       {...props}
     />,
   );
@@ -50,8 +51,8 @@ describe('ProductGrid', () => {
     renderGrid({ products: twoProducts });
 
     // Assert
-    expect(screen.getByRole('heading', { name: SONY })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: MACBOOK })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: SONY })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: MACBOOK })).toBeInTheDocument();
   });
 
   it('counts the products above the grid', () => {
@@ -114,7 +115,7 @@ describe('ProductGrid', () => {
     renderGrid({ products: [testProduct], isOffline: true });
 
     // Assert
-    expect(screen.getByRole('heading', { name: SONY })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: SONY })).toBeInTheDocument();
   });
 
   it('explains the pause in a line above the grid while offline', () => {

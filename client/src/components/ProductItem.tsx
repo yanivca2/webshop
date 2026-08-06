@@ -15,13 +15,14 @@ function addToBasketButtonLabel(isOutOfStock: boolean, atStockLimit: boolean): s
 interface ProductItemProps {
   product: Product;
   viewMode: ViewMode;
+  onOpenDetail: (productId: string) => void;
 }
 
 /**
  * One product from the product grid. Different view modes are defined using
  * only-CSS.
  */
-export default function ProductItem({ product, viewMode }: ProductItemProps) {
+export default function ProductItem({ product, viewMode, onOpenDetail }: ProductItemProps) {
   const [imageFailed, setImageFailed] = useState(false);
   const { quantityInBasket, add, isOutOfStock, atStockLimit } = useProductBasketState(product);
 
@@ -45,7 +46,11 @@ export default function ProductItem({ product, viewMode }: ProductItemProps) {
         )}
       </div>
 
-      <h3 className="item__name">{product.name}</h3>
+      <h3 className="item__name">
+        <button className="item__detail" onClick={() => onOpenDetail(product.id)}>
+          {product.name}
+        </button>
+      </h3>
 
       <span className="item__meta">
         <span className="item__brand">{product.brand}</span>
