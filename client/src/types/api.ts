@@ -1,15 +1,10 @@
 /**
  * Wire contract shared with the Spring Boot backend.
- * Mirrors `com.example.api.GreetingResponse` / `ApiError` in `server/`.
+ * Mirrors the Kotlin DTOs in `server/src/main/kotlin/com/example/api/`.
  * Keep both sides in sync when either changes.
  */
 
-export interface GreetingResponse {
-  message: string;
-  /** ISO-8601 instant, e.g. "2026-08-06T10:15:30Z" */
-  generatedAt: string;
-}
-
+/** Mirrors `com.example.api.ApiError`. */
 export interface ApiError {
   status: number;
   error: string;

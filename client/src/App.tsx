@@ -1,5 +1,4 @@
 import './App.css';
-import GreetingPanel from './components/GreetingPanel';
 
 export default function App() {
   return (
@@ -11,9 +10,7 @@ export default function App() {
         </p>
       </header>
 
-      <main className="app__main">
-        <GreetingPanel />
-      </main>
+      <main className="app__main" />
     </div>
   );
 }
