@@ -41,7 +41,7 @@ class ProductController(
     @GetMapping("/products/{id}")
     fun product(
         @PathVariable
-        @Size(max = MAX_ID_LENGTH, message = "id must be $MAX_ID_LENGTH characters or fewer")
+        @Size(max = Product.MAX_ID_LENGTH, message = "id must be ${Product.MAX_ID_LENGTH} characters or fewer")
         id: String,
     ): Product = productService.getById(id)
 
@@ -51,6 +51,5 @@ class ProductController(
     private companion object {
         const val MAX_SEARCH_LENGTH = 100
         const val MAX_CATEGORY_LENGTH = 50
-        const val MAX_ID_LENGTH = 50
     }
 }

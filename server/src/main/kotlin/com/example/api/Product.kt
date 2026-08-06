@@ -12,4 +12,9 @@ data class Product(
     val brand: String,
     val stock: Int,
     val imageUrl: String,
-)
+) {
+    companion object {
+        /** Shared with any other DTO carrying a product id, e.g. [PurchaseItemRequest]. */
+        const val MAX_ID_LENGTH = 50
+    }
+}
