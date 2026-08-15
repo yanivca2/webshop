@@ -5,9 +5,12 @@ import { createTestQueryClient, testProduct } from './test/renderWithProviders';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
 
-const products = [testProduct, { ...testProduct, id: '2', name: 'MacBook Air', category: 'Laptops' }];
+const products = [
+  testProduct,
+  { ...testProduct, id: '2', name: 'MacBook Air', category: 'Laptops' },
+];
 
-function routeFetch(): Response {
+function productsResponse(): Response {
   return new Response(JSON.stringify(products), {
     status: 200,
     headers: { 'Content-Type': 'application/json' },
@@ -36,7 +39,7 @@ describe('App', () => {
   it('loads and lists products from the API', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn(() => Promise.resolve(routeFetch())),
+      vi.fn(() => Promise.resolve(productsResponse())),
     );
 
     renderApp();
@@ -44,5 +47,4 @@ describe('App', () => {
     expect(await screen.findByRole('heading', { name: 'Sony WH-1000XM5' })).toBeInTheDocument();
     expect(screen.getByText('2 products')).toBeInTheDocument();
   });
-
 });

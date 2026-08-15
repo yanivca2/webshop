@@ -12,6 +12,8 @@ interface ProductGridProps {
   isError: boolean;
   error: Error | null;
   isOffline: boolean;
+  // True when filters are active, which changes what "no results" means.
+  isFiltered: boolean;
   onRetry: () => void;
 }
 
@@ -21,6 +23,7 @@ export default function ProductGrid({
   isError,
   error,
   isOffline,
+  isFiltered,
   onRetry,
 }: ProductGridProps) {
   const [viewMode, setViewMode] = useViewMode();
@@ -55,7 +58,9 @@ export default function ProductGrid({
       />
     );
   } else if (!products || products.length === 0) {
-    content = (
+    content = isFiltered ? (
+      <StatusMessage title="No products match your filters" detail="Try a different search term." />
+    ) : (
       <StatusMessage title="No products available" detail="The catalog is currently empty." />
     );
   } else {

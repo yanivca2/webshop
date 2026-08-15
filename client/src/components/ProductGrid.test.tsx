@@ -19,6 +19,7 @@ function renderGrid(props: Partial<ComponentProps<typeof ProductGrid>> = {}) {
       isError={false}
       error={null}
       isOffline={false}
+      isFiltered={false}
       onRetry={vi.fn()}
       {...props}
     />,
@@ -88,6 +89,15 @@ describe('ProductGrid', () => {
 
     // Assert
     expect(screen.getByText('No products available')).toBeInTheDocument();
+  });
+
+  it("shows 'no products found' when all products are filtered out", () => {
+    // Arrange + Act
+    renderGrid({ products: [], isFiltered: true });
+
+    // Assert - a different problem from an empty catalog, so a different
+    // message.
+    expect(screen.getByText('No products match your filters')).toBeInTheDocument();
   });
 
   it('shows an offline message when pending and offline', () => {

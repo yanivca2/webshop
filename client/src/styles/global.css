@@ -18,6 +18,9 @@
   --space-6: 1.5rem;
   --space-8: 2rem;
 
+  --tint-hover: rgb(0 0 0 / 7%);
+  --tint-active: rgb(0 0 0 / 14%);
+
   --radius: 10px;
   --shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 8px 24px rgb(0 0 0 / 6%);
 
@@ -38,6 +41,9 @@
     --color-warning: #f0c674;
     --color-warning-surface: #3a2f12;
     --color-warning-border: #6b5518;
+
+    --tint-hover: rgb(255 255 255 / 10%);
+    --tint-active: rgb(255 255 255 / 18%);
   }
 }
 
@@ -67,6 +73,19 @@ h3 {
 button {
   font: inherit;
   cursor: pointer;
+  transition: transform 80ms ease;
+}
+
+/* `linear-gradient` creates an image on-the-fly, so we create a semi-transparent
+   tint so to keep the hue of the button's `background-color`. */
+button:hover:not(:where(:disabled, [aria-disabled='true'])) {
+  background-image: linear-gradient(var(--tint-hover), var(--tint-hover));
+}
+
+button:active:not(:where(:disabled, [aria-disabled='true'])) {
+  background-image: linear-gradient(var(--tint-active), var(--tint-active));
+  /* Nudging the button on click for a 'press' effect. */
+  transform: translateY(1px);
 }
 
 input {
