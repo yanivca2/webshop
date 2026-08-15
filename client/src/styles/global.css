@@ -10,6 +10,11 @@
   --color-warning: #8a5a00;
   --color-warning-surface: #fff3cd;
   --color-warning-border: #e5c477;
+  /* An applied filter is a label on the results, not something to press, so
+     the chip that carries it is tinted rather than filled in the accent every
+     button on the page already wears. */
+  --color-tag-surface: #e4e9f6;
+  --color-tag-text: #2c3d6b;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -41,6 +46,8 @@
     --color-warning: #f0c674;
     --color-warning-surface: #3a2f12;
     --color-warning-border: #6b5518;
+    --color-tag-surface: #262f42;
+    --color-tag-text: #ccd7f2;
 
     --tint-hover: rgb(255 255 255 / 10%);
     --tint-active: rgb(255 255 255 / 18%);

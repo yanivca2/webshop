@@ -1,11 +1,13 @@
-/* One column at every width: the field runs the width of the listing, and the
-   buttons sit under it, after the changes they commit. */
+/* One column at every width: the field runs the width of the listing, the
+   category dropdown sits under it, and the applied filters read along the
+   bottom where the products they narrow begin. */
 .filters {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
     'search'
-    'actions';
+    'category'
+    'applied';
   gap: var(--space-3);
 }
 
@@ -17,6 +19,39 @@
 
 .filters__field--search {
   grid-area: search;
+}
+
+.filters__category-row {
+  grid-area: category;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: end;
+  gap: var(--space-2);
+}
+
+.filters__categories {
+  flex: 0 1 18rem;
+  /* Long enough to hold a "X categories selected". */
+  min-width: 11.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+/* The one caption left on screen: a bare row of chips would leave the reader
+   to work out what they are, and unlike the controls above they carry no
+   wording of their own. */
+.filters__caption {
+  padding: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
 }
 
 /* Hiding this element while keeping it in the accessibility tree for screen
@@ -74,34 +109,91 @@
   cursor: pointer;
 }
 
-.filters__actions {
-  grid-area: actions;
-  display: flex;
-  gap: var(--space-2);
-}
-
-.filters__apply,
-.filters__clear {
-  padding: var(--space-2) var(--space-4);
-  height: 2.5rem;
-  border-radius: var(--radius);
-  font-weight: 600;
-}
-
-.filters__apply {
-  border: none;
-  background-color: var(--color-accent);
-  color: var(--color-accent-contrast);
-}
-
-.filters__apply[aria-disabled='true'] {
-  background-color: var(--color-border);
+.filters__search[aria-disabled='true'] {
   color: var(--color-text-muted);
   cursor: not-allowed;
 }
 
 .filters__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  padding: var(--space-2) var(--space-4);
+  height: 2.5rem;
+  border-radius: var(--radius);
+  font-weight: 600;
   border: 1px solid var(--color-border);
   background-color: var(--color-bg);
   color: var(--color-text);
+}
+
+.filters__clear-icon {
+  display: none;
+}
+
+/* Only once the words and the dropdown genuinely cannot both fit: above this
+   the trigger gives up width instead, which costs nothing but a shorter field.
+   Below it the button keeps its meaning in a glyph and hands the width back. */
+@media (max-width: 21rem) {
+  .filters__clear {
+    padding-inline: var(--space-2);
+  }
+
+  .filters__clear-text {
+    display: none;
+  }
+
+  .filters__clear-icon {
+    display: block;
+  }
+}
+
+.filters__applied {
+  grid-area: applied;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+.filters__applied-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Tinted rather than filled, and borderless: the accent fill it used to wear
+   is what every button on the page wears, and this is a label on the results
+   rather than something to press. The × inside it is the only part that is. */
+.applied-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3);
+  border: none;
+  border-radius: 999px;
+  background-color: var(--color-tag-surface);
+  color: var(--color-tag-text);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.applied-chip__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
 }

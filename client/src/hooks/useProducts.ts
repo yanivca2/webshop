@@ -4,12 +4,17 @@ import type { Product } from '../types/api';
 
 export interface ProductFilters {
   search: string;
+  categories: string[];
 }
 
-// Trimming here means terms that build the same URL also build the same cache
+// Trimming here means filters that build the same URL also build the same cache
 // key, so they are one entry instead of a duplicate request.
-function normalize({ search }: ProductFilters): ProductFilters {
-  return { search: search.trim() };
+//
+// Categories are sorted because the key hash keeps array order: ticking Audio
+// then Laptops and ticking them the other way round are the same filter, and
+// without this they would be two cache entries and a second request.
+function normalize({ search, categories }: ProductFilters): ProductFilters {
+  return { search: search.trim(), categories: [...categories].sort((a, b) => a.localeCompare(b)) };
 }
 
 // Exported as a helper so tests can build the same key to read or seed the cache.
@@ -17,10 +22,13 @@ export function productsQueryKey(filters: ProductFilters) {
   return ['products', normalize(filters)] as const;
 }
 
-function buildQuery({ search }: ProductFilters): string {
+function buildQuery({ search, categories }: ProductFilters): string {
   const params = new URLSearchParams();
   if (search) {
     params.set('search', search);
+  }
+  for (const category of categories) {
+    params.append('categories', category);
   }
   const query = params.toString();
   return query ? `?${query}` : '';

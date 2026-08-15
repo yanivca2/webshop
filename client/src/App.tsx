@@ -1,17 +1,22 @@
 import { useState } from 'react';
 import ProductFilters from './components/ProductFilters';
 import ProductGrid from './components/ProductGrid';
+import { useCategories } from './hooks/useCategories';
 import { useProducts, type ProductFilters as ProductQueryFilters } from './hooks/useProducts';
 import './App.css';
 
 export default function App() {
-  // Filters only reach the query once the user applies them, so typing does
-  // not fire a request until they ask for it.
-  const [appliedFilters, setAppliedFilters] = useState<ProductQueryFilters>({ search: '' });
+  // Filters only reach the query once the user applies them, so typing or
+  // picking a category does not fire a request until they ask for it.
+  const [appliedFilters, setAppliedFilters] = useState<ProductQueryFilters>({
+    search: '',
+    categories: [],
+  });
 
   const products = useProducts(appliedFilters);
+  const categories = useCategories();
 
-  const isFiltered = appliedFilters.search.trim() !== '';
+  const isFiltered = appliedFilters.search.trim() !== '' || appliedFilters.categories.length > 0;
 
   // The button reports the request an apply started, not every request the
   // query makes: `isFetching` is also true during the first load and during
@@ -31,7 +36,18 @@ export default function App() {
       </header>
 
       <main className="app__main">
-        <ProductFilters isApplying={isApplying} onApply={setAppliedFilters} />
+        <ProductFilters
+          categories={categories.data ?? []}
+          // A failed category list is its own problem, not an empty catalog:
+          // without these the dropdown would open on "No categories match
+          // that." and never say the request had failed.
+          categoriesPending={categories.isPending}
+          categoriesFailed={categories.isError}
+          onRetryCategories={() => void categories.refetch()}
+          applied={appliedFilters}
+          isApplying={isApplying}
+          onApply={setAppliedFilters}
+        />
 
         <ProductGrid
           products={products.data}
