@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { apiRequest } from '../lib/apiClient';
 
 /**
@@ -6,10 +6,10 @@ import { apiRequest } from '../lib/apiClient';
  * product list: deriving them would shrink the filter options as the user
  * filters, making it impossible to switch to a category you had filtered out.
  */
-export function useCategories() {
+export function useCategories(): UseQueryResult<string[], Error> {
   return useQuery({
     queryKey: ['categories'],
-    queryFn: ({ signal }) => apiRequest<string[]>('/api/categories', { signal }),
+    queryFn: ({ signal }): Promise<string[]> => apiRequest<string[]>('/api/categories', { signal }),
     staleTime: Infinity,
   });
 }

@@ -2,23 +2,28 @@ import { onlineManager } from '@tanstack/react-query';
 import { screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import ProductDetailDialog from './ProductDetailDialog';
-import { jsonResponse, renderWithProviders, testProduct } from '../test/renderWithProviders';
+import {
+  jsonResponse,
+  renderWithProviders,
+  testProduct,
+  type ProvidersRenderResult,
+} from '../test/renderWithProviders';
 
-function stubProduct() {
+function stubProduct(): void {
   vi.stubGlobal(
     'fetch',
     vi.fn(() => Promise.resolve(jsonResponse(testProduct))),
   );
 }
 
-function stubProductThatNeverAnswers() {
+function stubProductThatNeverAnswers(): void {
   vi.stubGlobal(
     'fetch',
     vi.fn(() => new Promise<Response>(() => {})),
   );
 }
 
-function renderDialog() {
+function renderDialog(): ProvidersRenderResult {
   return renderWithProviders(<ProductDetailDialog productId={testProduct.id} onClose={vi.fn()} />);
 }
 

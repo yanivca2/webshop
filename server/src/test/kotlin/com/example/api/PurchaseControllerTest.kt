@@ -133,6 +133,26 @@ class PurchaseControllerTest {
     }
 
     @Test
+    fun `rejects a blank product id`() {
+        postPurchase("""{"items":[{"productId":"","quantity":1}]}""")
+            .andExpect {
+                status { isBadRequest() }
+                jsonPath("$.message") { value("items[0].productId must not be blank") }
+            }
+    }
+
+    @Test
+    fun `rejects a basket with more lines than the cap`() {
+        val items = (1..101).joinToString(",") { """{"productId":"$it","quantity":1}""" }
+
+        postPurchase("""{"items":[$items]}""")
+            .andExpect {
+                status { isBadRequest() }
+                jsonPath("$.message") { value("items must contain at most 100 items") }
+            }
+    }
+
+    @Test
     fun `rejects a quantity beyond stock`() {
         postPurchase("""{"items":[{"productId":"1","quantity":15}]}""")
             .andExpect {

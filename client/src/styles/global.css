@@ -1,131 +1,282 @@
-:root {
-  --color-bg: #f6f7f9;
-  --color-surface: #ffffff;
-  --color-border: #d8dce3;
-  --color-text: #1b1f24;
-  --color-text-muted: #5b6472;
-  --color-accent: #2f5bea;
-  --color-accent-contrast: #ffffff;
-  --color-danger: #b3261e;
-  --color-warning: #8a5a00;
-  --color-warning-surface: #fff3cd;
-  --color-warning-border: #e5c477;
-  /* An applied filter is a label on the results, not something to press, so
-     the chip that carries it is tinted rather than filled in the accent every
-     button on the page already wears. */
-  --color-tag-surface: #e4e9f6;
-  --color-tag-text: #2c3d6b;
-  --color-success: #1b7a4b;
-  --color-success-contrast: #ffffff;
+/* :) */
 
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-12: 3rem;
-
-  --layout-max-width: 72rem;
-
-  --tint-hover: rgb(0 0 0 / 7%);
-  --tint-active: rgb(0 0 0 / 14%);
-
-  --radius: 10px;
-  --shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 8px 24px rgb(0 0 0 / 6%);
-  --shadow-floating: 0 2px 6px rgb(0 0 0 / 16%), 0 10px 28px rgb(0 0 0 / 14%);
-
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+@font-face {
+  font-family: Graphik;
+  src:
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Graphik/Graphik-Semibold-Web.woff2)
+      format('woff2'),
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Graphik/Graphik-Semibold-Web.woff)
+      format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: 100%;
+  font-display: swap;
 }
 
-@media (prefers-color-scheme: dark) {
+@font-face {
+  font-family: Graphik;
+  src:
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Graphik/Graphik-Regular-Web.woff2)
+      format('woff2'),
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Graphik/Graphik-Regular-Web.woff)
+      format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-stretch: 100%;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Graphik;
+  src:
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Graphik/Graphik-Semibold-Web.woff2)
+      format('woff2'),
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Graphik/Graphik-Semibold-Web.woff)
+      format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: 100%;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Graphik;
+  src:
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Graphik/Graphik-Regular-Web.woff2)
+      format('woff2'),
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Graphik/Graphik-Regular-Web.woff)
+      format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-stretch: 100%;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Produkt;
+  src:
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Produkt/Produkt-Super-Web.woff2)
+      format('woff2'),
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Produkt/Produkt-Super-Web.woff)
+      format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: 100%;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Produkt;
+  src:
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Produkt/Produkt-Bold-Web.woff2)
+      format('woff2'),
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Produkt/Produkt-Bold-Web.woff)
+      format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-stretch: 100%;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Produkt;
+  src:
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Produkt/Produkt-Light-Web.woff2)
+      format('woff2'),
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Produkt/Produkt-Light-Web.woff)
+      format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: 100%;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Produkt;
+  src:
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Produkt/Produkt-Super-Web.woff2)
+      format('woff2'),
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Produkt/Produkt-Super-Web.woff)
+      format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: 100%;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Produkt;
+  src:
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Produkt/Produkt-Bold-Web.woff2)
+      format('woff2'),
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Produkt/Produkt-Bold-Web.woff)
+      format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-stretch: 100%;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Produkt;
+  src:
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Produkt/Produkt-Light-Web.woff2)
+      format('woff2'),
+    url(https://assets.s-bol.com/nl/static/assets/webfonts/Produkt/Produkt-Light-Web.woff)
+      format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: 100%;
+  font-display: swap;
+}
+
+/* Declared up front so the order is stated in one place rather than inferred
+   from which layer happens to appear first. Everything the app styles lives in
+   `base`; `user-preferences` exists to overrule it, which is what a layer does
+   without `!important` having to say so. */
+@layer base, user-preferences;
+
+@layer base {
   :root {
-    --color-bg: #14171c;
-    --color-surface: #1c2027;
-    --color-border: #2e343e;
-    --color-text: #e8eaee;
-    --color-text-muted: #9aa4b2;
-    --color-accent: #7d9bff;
-    --color-accent-contrast: #10131a;
-    --color-danger: #ff8a80;
-    --color-warning: #f0c674;
-    --color-warning-surface: #3a2f12;
-    --color-warning-border: #6b5518;
-    --color-tag-surface: #262f42;
-    --color-tag-text: #ccd7f2;
-    --color-success: #6ede9f;
-    --color-success-contrast: #10131a;
+    --color-bg: #f6f7f9;
+    --color-surface: #ffffff;
+    --color-border: #d8dce3;
+    --color-text: #1b1f24;
+    --color-text-muted: #5b6472;
+    --color-accent: #2f5bea;
+    --color-accent-contrast: #ffffff;
+    --color-danger: #b3261e;
+    --color-warning: #8a5a00;
+    --color-warning-surface: #fff3cd;
+    --color-warning-border: #e5c477;
+    /* An applied filter is a label on the results, not something to press, so
+       the chip that carries it is tinted rather than filled in the accent every
+       button on the page already wears. */
+    --color-tag-surface: #e4e9f6;
+    --color-tag-text: #2c3d6b;
+    --color-success: #1b7a4b;
+    --color-success-contrast: #ffffff;
 
-    --tint-hover: rgb(255 255 255 / 10%);
-    --tint-active: rgb(255 255 255 / 18%);
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-12: 3rem;
 
-    --shadow-floating: 0 2px 6px rgb(0 0 0 / 45%), 0 10px 28px rgb(0 0 0 / 35%);
+    --layout-max-width: 72rem;
+
+    --tint-hover: rgb(0 0 0 / 7%);
+    --tint-active: rgb(0 0 0 / 14%);
+
+    --radius: 10px;
+    --shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 8px 24px rgb(0 0 0 / 6%);
+    --shadow-floating: 0 2px 6px rgb(0 0 0 / 16%), 0 10px 28px rgb(0 0 0 / 14%);
+
+    --font-sans:
+      Graphik, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    /* Produkt is a slab, so the fallback is a serif: if it has not arrived (or
+       never does), a heading still reads as a heading beside the body text. */
+    --font-title: Produkt, 'Iowan Old Style', Georgia, serif;
+    --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
   }
-}
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-bg: #14171c;
+      --color-surface: #1c2027;
+      --color-border: #2e343e;
+      --color-text: #e8eaee;
+      --color-text-muted: #9aa4b2;
+      --color-accent: #7d9bff;
+      --color-accent-contrast: #10131a;
+      --color-danger: #ff8a80;
+      --color-warning: #f0c674;
+      --color-warning-surface: #3a2f12;
+      --color-warning-border: #6b5518;
+      --color-tag-surface: #262f42;
+      --color-tag-text: #ccd7f2;
+      --color-success: #6ede9f;
+      --color-success-contrast: #10131a;
 
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
+      --tint-hover: rgb(255 255 255 / 10%);
+      --tint-active: rgb(255 255 255 / 18%);
+
+      --shadow-floating: 0 2px 6px rgb(0 0 0 / 45%), 0 10px 28px rgb(0 0 0 / 35%);
+    }
   }
-}
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-sans);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-}
-
-h1,
-h2,
-h3 {
-  margin: 0;
-  line-height: 1.2;
-}
-
-button {
-  font: inherit;
-  cursor: pointer;
-  transition: transform 80ms ease;
-}
-
-/* `linear-gradient` creates an image on-the-fly, so we create a semi-transparent
-   tint so to keep the hue of the button's `background-color`. */
-button:hover:not(:where(:disabled, [aria-disabled='true'])) {
-  background-image: linear-gradient(var(--tint-hover), var(--tint-hover));
-}
-
-button:active:not(:where(:disabled, [aria-disabled='true'])) {
-  background-image: linear-gradient(var(--tint-active), var(--tint-active));
-  /* Nudging the button on click for a 'press' effect. */
-  transform: translateY(1px);
-}
-
-input {
-  font: inherit;
-}
-
-:where(a, button, input, [tabindex]):focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    box-sizing: border-box;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+    font-family: var(--font-title);
+    line-height: 1.2;
+  }
+
+  button {
+    font: inherit;
+    cursor: pointer;
+    transition: transform 80ms ease;
+  }
+
+  /* `linear-gradient` creates an image on-the-fly, so we create a
+     semi-transparent tint so to keep the hue of the button's
+     `background-color`. */
+  button:hover:not(:where(:disabled, [aria-disabled='true'])) {
+    background-image: linear-gradient(var(--tint-hover), var(--tint-hover));
+  }
+
+  button:active:not(:where(:disabled, [aria-disabled='true'])) {
+    background-image: linear-gradient(var(--tint-active), var(--tint-active));
+    /* Nudging the button on click for a 'press' effect. */
+    transform: translateY(1px);
+  }
+
+  input {
+    font: inherit;
+  }
+
+  :where(a, button, input, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+@layer user-preferences {
+  /* Later layer, so these win over anything in `base` whatever its
+     specificity - no `!important` needed. Someone asking their system to
+     reduce motion outranks any styling decision made here. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms;
+      animation-iteration-count: 1;
+      transition-duration: 0.01ms;
+    }
   }
 }

@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react';
 import { formatPrice, lineTotal } from '../lib/money';
 import type { BasketItem } from '../basket/basketStore';
 import './BasketLine.css';
@@ -14,7 +15,7 @@ export default function BasketLine({
   onIncrement,
   onDecrement,
   onRemove,
-}: BasketLineProps) {
+}: BasketLineProps): ReactElement {
   const atStockLimit = item.quantity >= item.stock;
 
   return (

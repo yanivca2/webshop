@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, type ReactElement } from 'react';
 import BasketPanel from './components/BasketPanel';
 import ProductDetailDialog from './components/ProductDetailDialog';
 import ProductFilters from './components/ProductFilters';
@@ -8,7 +8,7 @@ import { useHashProductId } from './hooks/useHashProductId';
 import { useProducts, type ProductFilters as ProductQueryFilters } from './hooks/useProducts';
 import './App.css';
 
-export default function App() {
+export default function App(): ReactElement {
   // Filters only reach the query once the user applies them, so typing or
   // picking a category does not fire a request until they ask for it.
   const [appliedFilters, setAppliedFilters] = useState<ProductQueryFilters>({
@@ -41,7 +41,7 @@ export default function App() {
   return (
     <div className="app">
       <header className="app__header">
-        <h1 className="app__title">Webshop</h1>
+        <h1 className="app__title">bloc.</h1>
         <p className="app__subtitle">Tech and electronics, served by Spring Boot.</p>
       </header>
 

@@ -1,208 +1,210 @@
-/* Shared by both view modes. Everything that differs between a card and a
-   compact row lives in the .item--cards / .item--list blocks below, which do
-   the work purely by re-placing the same elements on a different grid. */
-.item {
-  display: grid;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  /* Similar to `overflow: hidden` withouth creating a scroll container. */
-  overflow: clip;
-}
-
-.item__media {
-  grid-area: media;
-  background-color: var(--color-bg);
-}
-
-.item__image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.item__image-fallback {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  place-items: center;
-  color: var(--color-text-muted);
-  font-size: 0.75rem;
-  text-align: center;
-}
-
-.item__name {
-  grid-area: name;
-  font-size: 1rem;
-}
-
-/* Reset button styles to look like a link. */
-.item__detail {
-  padding: 0;
-  border: none;
-  background: none;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-}
-
-/* Reset global button hover style, so this will look like a link. */
-.item__detail:hover {
-  background-image: none;
-  color: var(--color-accent);
-  text-decoration: underline;
-}
-
-.item__meta {
-  grid-area: meta;
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
-}
-
-.item__category::before,
-.item--cards .item__in-basket::before {
-  content: '·';
-  margin: 0 var(--space-1);
-}
-
-.item__description {
-  grid-area: description;
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
-}
-
-.item__price {
-  grid-area: price;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.item__stock {
-  grid-area: stock;
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
-  white-space: nowrap;
-}
-
-.item__add {
-  grid-area: add;
-  padding: var(--space-2) var(--space-4);
-  border: none;
-  border-radius: var(--radius);
-  background-color: var(--color-accent);
-  color: var(--color-accent-contrast);
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.item__add:disabled {
-  background-color: var(--color-border);
-  color: var(--color-text-muted);
-  cursor: not-allowed;
-}
-
-.item--cards {
-  grid-template-columns: 1fr auto;
-  /* One track per row of the template below, and the fourth - description - is
-     deliberately the only flexible one.
-
-     Every card stretches to the height of the tallest in its row, so a card
-     with a shorter description ends up with leftover vertical space. That
-     space has to land somewhere: with six `auto` tracks the grid shares it out
-     between all of them, quietly padding the image, name and meta rows and
-     leaving each card's price and button at a slightly different height.
-     `1fr` on the description row sends the whole remainder there instead, so
-     the price/stock and add rows stay pinned to the card's bottom edge and
-     line up across the row. */
-  grid-template-rows: auto auto auto 1fr auto auto;
-  grid-template-areas:
-    'media       media'
-    'name        name'
-    'meta        meta'
-    'description description'
-    'price       stock'
-    'add         add';
-  gap: var(--space-2);
-  padding: var(--space-4);
-}
-
-/* Full-bleed image: the card pads its text, and the media cancels that padding
-   so the image meets the card's own (clipped) edges. */
-.item--cards .item__media {
-  margin: calc(var(--space-4) * -1) calc(var(--space-4) * -1) 0;
-  aspect-ratio: 4 / 3;
-}
-
-.item--cards .item__price {
-  font-size: 1.125rem;
-}
-
-.item--cards .item__stock {
-  align-self: center;
-}
-
-.item--list {
-  grid-template-columns: auto 1fr auto auto;
-  grid-template-areas:
-    'media name price add'
-    'media meta stock add';
-  align-items: center;
-  gap: var(--space-1) var(--space-3);
-  padding: var(--space-2) var(--space-3);
-}
-
-.item--list .item__price,
-.item--list .item__stock {
-  text-align: right;
-}
-
-.item--list .item__in-stock,
-.item--list .item__in-basket {
-  display: block;
-}
-
-/* Full-bleed like the card's image: stretch to the full row height, then
-   cancel the row's padding so the image meets the row's own clipped edges on
-   the three sides it touches. */
-.item--list .item__media {
-  position: relative;
-  width: 4rem;
-  align-self: stretch;
-  margin: calc(var(--space-2) * -1) 0 calc(var(--space-2) * -1) calc(var(--space-3) * -1);
-}
-
-/* Taken out of flow so the row's height comes from its text alone. */
-.item--list .item__image,
-.item--list .item__image-fallback {
-  position: absolute;
-  inset: 0;
-}
-
-.item--list .item__description {
-  display: none;
-}
-
-@container grid-panel (max-width: 32rem) {
-  .item--list {
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas:
-      'media name  name'
-      'media meta  meta'
-      'price price stock'
-      'add   add   add';
-    gap: var(--space-2) var(--space-3);
+@layer base {
+  /* Shared by both view modes. Everything that differs between a card and a
+     compact row lives in the .item--cards / .item--list blocks below, which do
+     the work purely by re-placing the same elements on a different grid. */
+  .item {
+    display: grid;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    /* Similar to `overflow: hidden` withouth creating a scroll container. */
+    overflow: clip;
   }
 
-  .item--list .item__price {
+  .item__media {
+    grid-area: media;
+    background-color: var(--color-bg);
+  }
+
+  .item__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .item__image-fallback {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    text-align: center;
+  }
+
+  .item__name {
+    grid-area: name;
+    font-size: 1rem;
+  }
+
+  /* Reset button styles to look like a link. */
+  .item__detail {
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
     text-align: left;
   }
 
+  /* Reset global button hover style, so this will look like a link. */
+  .item__detail:hover {
+    background-image: none;
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  .item__meta {
+    grid-area: meta;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .item__category::before,
+  .item--cards .item__in-basket::before {
+    content: '·';
+    margin: 0 var(--space-1);
+  }
+
+  .item__description {
+    grid-area: description;
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  .item__price {
+    grid-area: price;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .item__stock {
+    grid-area: stock;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  .item__add {
+    grid-area: add;
+    padding: var(--space-2) var(--space-4);
+    border: none;
+    border-radius: var(--radius);
+    background-color: var(--color-accent);
+    color: var(--color-accent-contrast);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .item__add:disabled {
+    background-color: var(--color-border);
+    color: var(--color-text-muted);
+    cursor: not-allowed;
+  }
+
+  .item--cards {
+    grid-template-columns: 1fr auto;
+    /* One track per row of the template below, and the fourth - description - is
+       deliberately the only flexible one.
+
+       Every card stretches to the height of the tallest in its row, so a card
+       with a shorter description ends up with leftover vertical space. That
+       space has to land somewhere: with six `auto` tracks the grid shares it out
+       between all of them, quietly padding the image, name and meta rows and
+       leaving each card's price and button at a slightly different height.
+       `1fr` on the description row sends the whole remainder there instead, so
+       the price/stock and add rows stay pinned to the card's bottom edge and
+       line up across the row. */
+    grid-template-rows: auto auto auto 1fr auto auto;
+    grid-template-areas:
+      'media       media'
+      'name        name'
+      'meta        meta'
+      'description description'
+      'price       stock'
+      'add         add';
+    gap: var(--space-2);
+    padding: var(--space-4);
+  }
+
+  /* Full-bleed image: the card pads its text, and the media cancels that padding
+     so the image meets the card's own (clipped) edges. */
+  .item--cards .item__media {
+    margin: calc(var(--space-4) * -1) calc(var(--space-4) * -1) 0;
+    aspect-ratio: 4 / 3;
+  }
+
+  .item--cards .item__price {
+    font-size: 1.125rem;
+  }
+
+  .item--cards .item__stock {
+    align-self: center;
+  }
+
+  .item--list {
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-areas:
+      'media name price add'
+      'media meta stock add';
+    align-items: center;
+    gap: var(--space-1) var(--space-3);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .item--list .item__price,
+  .item--list .item__stock {
+    text-align: right;
+  }
+
+  .item--list .item__in-stock,
+  .item--list .item__in-basket {
+    display: block;
+  }
+
+  /* Full-bleed like the card's image: stretch to the full row height, then
+     cancel the row's padding so the image meets the row's own clipped edges on
+     the three sides it touches. */
   .item--list .item__media {
-    width: 3rem;
-    margin: calc(var(--space-2) * -1) 0 0 calc(var(--space-3) * -1);
-    border-bottom-right-radius: var(--radius);
-    overflow: clip;
+    position: relative;
+    width: 4rem;
+    align-self: stretch;
+    margin: calc(var(--space-2) * -1) 0 calc(var(--space-2) * -1) calc(var(--space-3) * -1);
+  }
+
+  /* Taken out of flow so the row's height comes from its text alone. */
+  .item--list .item__image,
+  .item--list .item__image-fallback {
+    position: absolute;
+    inset: 0;
+  }
+
+  .item--list .item__description {
+    display: none;
+  }
+
+  @container grid-panel (max-width: 32rem) {
+    .item--list {
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas:
+        'media name  name'
+        'media meta  meta'
+        'price price stock'
+        'add   add   add';
+      gap: var(--space-2) var(--space-3);
+    }
+
+    .item--list .item__price {
+      text-align: left;
+    }
+
+    .item--list .item__media {
+      width: 3rem;
+      margin: calc(var(--space-2) * -1) 0 0 calc(var(--space-3) * -1);
+      border-bottom-right-radius: var(--radius);
+      overflow: clip;
+    }
   }
 }

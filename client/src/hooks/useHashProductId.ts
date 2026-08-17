@@ -24,16 +24,18 @@ function readHash(): string | null {
  * makes the dialog survive a reload and respond to Back - a router would give
  * the same result, at the cost of a dependency this app otherwise needs.
  */
-export function useHashProductId(): [string | null, (productId: string | null) => void] {
+export type HashProductIdState = [string | null, (productId: string | null) => void];
+
+export function useHashProductId(): HashProductIdState {
   const [productId, setProductId] = useState<string | null>(readHash);
 
   useEffect(() => {
-    const syncFromHash = () => setProductId(readHash());
+    const syncFromHash = (): void => setProductId(readHash());
     window.addEventListener('hashchange', syncFromHash);
     return () => window.removeEventListener('hashchange', syncFromHash);
   }, []);
 
-  const select = useCallback((next: string | null) => {
+  const select = useCallback((next: string | null): void => {
     // State is set here rather than left to the `hashchange` listener. Writing
     // the hash does fire that event, but not synchronously, so relying on it
     // alone would leave the dialog a tick behind the URL. Setting both is

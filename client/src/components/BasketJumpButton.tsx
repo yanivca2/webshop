@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react';
 import './BasketJumpButton.css';
 
 const LABEL = 'Jump to basket';
@@ -15,7 +16,7 @@ interface BasketJumpButtonProps {
  * element - that is what puts it in scope of the `--basket-visibility` view
  * timeline the basket declares.
  */
-export default function BasketJumpButton({ elementId }: BasketJumpButtonProps) {
+export default function BasketJumpButton({ elementId }: BasketJumpButtonProps): ReactElement {
   return (
     <a className="basket-jump" href={`#${elementId}`} aria-label={LABEL} title={LABEL}>
       <svg

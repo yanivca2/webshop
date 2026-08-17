@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { useHashProductId } from './useHashProductId';
 
-function setHash(hash: string) {
+function setHash(hash: string): void {
   window.history.replaceState(null, '', hash === '' ? '/' : `/${hash}`);
 }
 

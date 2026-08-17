@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react';
 import type { ViewMode } from '../hooks/useViewMode';
 import './ViewModeToggle.css';
 
@@ -6,7 +7,7 @@ interface ViewModeToggleProps {
   onChange: (mode: ViewMode) => void;
 }
 
-export default function ViewModeToggle({ value, onChange }: ViewModeToggleProps) {
+export default function ViewModeToggle({ value, onChange }: ViewModeToggleProps): ReactElement {
   return (
     <div className="view-toggle" role="group" aria-label="Product view">
       <button

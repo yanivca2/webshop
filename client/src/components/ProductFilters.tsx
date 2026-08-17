@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent, type ReactElement } from 'react';
 import CategoryDropdown from './CategoryDropdown';
 import type { ProductFilters as ProductQueryFilters } from '../hooks/useProducts';
 import './ProductFilters.css';
@@ -14,7 +14,7 @@ function tryFocusOnNextCategory(
   list: HTMLUListElement | null,
   category: string,
   fallback: HTMLElement | null,
-) {
+): void {
   const buttons = Array.from(list?.querySelectorAll('button') ?? []);
   const index = buttons.findIndex((button) => button.dataset.category === category);
   const next = buttons[index + 1] ?? buttons[index - 1] ?? fallback;
@@ -43,7 +43,7 @@ export default function ProductFilters({
   applied,
   isApplying,
   onApply,
-}: ProductFiltersProps) {
+}: ProductFiltersProps): ReactElement {
   const [search, setSearch] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -51,7 +51,7 @@ export default function ProductFilters({
 
   const appliedCategories = [...applied.categories].sort((a, b) => a.localeCompare(b));
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
     if (isApplying) {
       return;
@@ -59,7 +59,7 @@ export default function ProductFilters({
     onApply({ search, categories: selectedCategories });
   }
 
-  function handleClear() {
+  function handleClear(): void {
     setSearch('');
     setSelectedCategories([]);
     onApply(NO_FILTERS);
@@ -71,11 +71,11 @@ export default function ProductFilters({
    * categories: if the user has typed a term and not searched for it yet, a
    * category button should not submit it on their behalf.
    */
-  function applyCategories(nextCategories: string[]) {
+  function applyCategories(nextCategories: string[]): void {
     onApply({ ...applied, categories: nextCategories });
   }
 
-  function removeAppliedCategory(category: string) {
+  function removeAppliedCategory(category: string): void {
     tryFocusOnNextCategory(appliedListRef.current, category, searchRef.current);
 
     setSelectedCategories((current) => current.filter((picked) => picked !== category));

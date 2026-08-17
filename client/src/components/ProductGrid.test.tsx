@@ -4,14 +4,20 @@ import type { ComponentProps } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useBasketStore } from '../basket/basketStore';
 import ProductGrid from './ProductGrid';
-import { renderWithProviders, testProduct } from '../test/renderWithProviders';
+import {
+  renderWithProviders,
+  testProduct,
+  type ProvidersRenderResult,
+} from '../test/renderWithProviders';
 
 const SONY = 'Sony WH-1000XM5';
 const MACBOOK = 'MacBook Air';
 
 const twoProducts = [testProduct, { ...testProduct, id: '2', name: MACBOOK }];
 
-function renderGrid(props: Partial<ComponentProps<typeof ProductGrid>> = {}) {
+function renderGrid(
+  props: Partial<ComponentProps<typeof ProductGrid>> = {},
+): ProvidersRenderResult {
   return renderWithProviders(
     <ProductGrid
       products={undefined}

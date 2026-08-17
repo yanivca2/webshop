@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import ProductItem from './ProductItem';
 import StatusMessage from './StatusMessage';
 import ViewModeToggle from './ViewModeToggle';
@@ -27,7 +27,7 @@ export default function ProductGrid({
   isFiltered,
   onRetry,
   onOpenDetail,
-}: ProductGridProps) {
+}: ProductGridProps): ReactElement {
   const [viewMode, setViewMode] = useViewMode();
   const resultCount = products?.length;
 

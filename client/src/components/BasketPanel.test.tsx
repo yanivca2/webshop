@@ -1,11 +1,16 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { useBasketStore } from '../basket/basketStore';
 import BasketPanel from './BasketPanel';
 import ProductGrid from './ProductGrid';
 import { formatPrice } from '../lib/money';
-import { jsonResponse, renderWithProviders, testProduct } from '../test/renderWithProviders';
+import {
+  jsonResponse,
+  renderWithProviders,
+  testProduct,
+  type ProvidersRenderResult,
+} from '../test/renderWithProviders';
 import type { Product, PurchaseResponse } from '../types/api';
 
 const HEADPHONES: Product = {
@@ -38,7 +43,7 @@ const rejectedOrder = {
   message: 'Only 14 in stock, requested 15',
 };
 
-function basketElement() {
+function basketElement(): ReturnType<typeof within> {
   return within(screen.getByRole('complementary', { name: 'Basket' }));
 }
 
@@ -46,7 +51,7 @@ function basketTotalMinorUnits(): number {
   return Number((basketElement().getByRole('definition').textContent ?? '').replace(/\D/g, ''));
 }
 
-function renderShop(product: Product) {
+function renderShop(product: Product): ProvidersRenderResult {
   return renderWithProviders(
     <>
       <ProductGrid
@@ -67,12 +72,15 @@ function renderShop(product: Product) {
 async function renderShopWithOneInBasket(
   user: ReturnType<typeof userEvent.setup>,
   product: Product,
-) {
+): Promise<void> {
   renderShop(product);
   await user.click(screen.getByRole('button', { name: 'Add to basket' }));
 }
 
-function stubPurchase(body: unknown = order, status = 201) {
+function stubPurchase(
+  body: unknown = order,
+  status = 201,
+): Mock<(input: RequestInfo | URL, init?: RequestInit) => Promise<Response>> {
   const fetchMock = vi.fn((_input: RequestInfo | URL, _init?: RequestInit) =>
     Promise.resolve(jsonResponse(body, status)),
   );
@@ -81,16 +89,17 @@ function stubPurchase(body: unknown = order, status = 201) {
 }
 
 // A purchase that never answers, so the button can be read mid-request.
-function stubPurchaseThatHangs() {
+function stubPurchaseThatHangs(): void {
   vi.stubGlobal(
     'fetch',
     vi.fn(() => new Promise<Response>(() => {})),
   );
 }
 
-const purchaseButton = () => screen.getByRole('button', { name: /Purchase|Placing order/ });
+const purchaseButton = (): HTMLElement =>
+  screen.getByRole('button', { name: /Purchase|Placing order/ });
 
-const increaseButton = (product: Product) =>
+const increaseButton = (product: Product): HTMLElement =>
   screen.getByRole('button', { name: `Increase quantity of ${product.name}` });
 
 describe('BasketPanel', () => {
@@ -352,6 +361,36 @@ describe('BasketPanel', () => {
 
     // Assert - nothing was bought, so nothing is taken away.
     expect(basketElement().getByText(HEADPHONES.name)).toBeInTheDocument();
+  });
+
+  it('moves focus to Continue shopping once the order is placed', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    stubPurchase();
+    await renderShopWithOneInBasket(user, HEADPHONES);
+
+    // Act - the button pressed here is replaced by the confirmation.
+    await user.click(purchaseButton());
+    await screen.findByText('Order placed');
+
+    // Assert - otherwise focus falls to <body> and a keyboard user is left at
+    // the top of the page, with the outcome somewhere below.
+    expect(screen.getByRole('button', { name: 'Continue shopping' })).toHaveFocus();
+  });
+
+  it('hands focus back to the basket after continuing', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    stubPurchase();
+    await renderShopWithOneInBasket(user, HEADPHONES);
+    await user.click(purchaseButton());
+    await screen.findByText('Order placed');
+
+    // Act - and this button replaces itself in turn.
+    await user.click(screen.getByRole('button', { name: 'Continue shopping' }));
+
+    // Assert
+    expect(screen.getByRole('heading', { name: 'Basket' })).toHaveFocus();
   });
 
   it('goes back to the basket after continuing', async () => {

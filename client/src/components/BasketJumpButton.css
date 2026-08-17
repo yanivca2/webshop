@@ -1,52 +1,54 @@
-/* Only exists in the stacked layout. Above 60rem the basket is already beside
-   the listing and permanently in view, so there is nothing to jump to. */
-.basket-jump {
-  display: none;
-}
-
-@keyframes basket-jump-dismiss {
-  from {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
-@media (max-width: 60rem) {
+@layer base {
+  /* Only exists in the stacked layout. Above 60rem the basket is already beside
+     the listing and permanently in view, so there is nothing to jump to. */
   .basket-jump {
-    position: fixed;
-    left: var(--space-4);
-    bottom: var(--space-4);
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-4);
-    border-radius: 999px;
-    background-color: var(--color-accent);
-    color: var(--color-accent-contrast);
-    font-weight: 600;
-    text-decoration: none;
-    box-shadow: var(--shadow-floating);
+    display: none;
   }
 
-  /* Fades out as the basket scrolls into view. When there's no browser support
-     for `animation-timeline: view()`, the button does not disappear at all.
+  @keyframes basket-jump-dismiss {
+    from {
+      opacity: 1;
+      visibility: visible;
+    }
 
-     Without the @supports guard it would never appear instead: the animation
-     would still run and `both` would hold it at the hidden keyframe.
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
 
-     `--basket-visibility` is declared in BasketPanel.css and reaches here
-     because this button renders inside the panel. */
-  @supports (animation-timeline: view()) {
+  @media (max-width: 60rem) {
     .basket-jump {
-      animation: basket-jump-dismiss linear both;
-      animation-timeline: --basket-visibility;
-      animation-range: entry 0% entry 20%;
+      position: fixed;
+      left: var(--space-4);
+      bottom: var(--space-4);
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      border-radius: 999px;
+      background-color: var(--color-accent);
+      color: var(--color-accent-contrast);
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: var(--shadow-floating);
+    }
+
+    /* Fades out as the basket scrolls into view. When there's no browser support
+       for `animation-timeline: view()`, the button does not disappear at all.
+
+       Without the @supports guard it would never appear instead: the animation
+       would still run and `both` would hold it at the hidden keyframe.
+
+       `--basket-visibility` is declared in BasketPanel.css and reaches here
+       because this button renders inside the panel. */
+    @supports (animation-timeline: view()) {
+      .basket-jump {
+        animation: basket-jump-dismiss linear both;
+        animation-timeline: --basket-visibility;
+        animation-range: entry 0% entry 20%;
+      }
     }
   }
 }

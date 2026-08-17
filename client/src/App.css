@@ -1,40 +1,49 @@
-.app {
-  max-width: var(--layout-max-width);
-  margin: 0 auto;
-  padding: var(--space-8) var(--space-4) var(--space-12);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-}
+@layer base {
+  .app {
+    max-width: var(--layout-max-width);
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-4) var(--space-12);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
 
-.app__title {
-  font-size: 1.75rem;
-  letter-spacing: -0.02em;
-}
+  .app__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-3);
+  }
 
-.app__subtitle {
-  margin: var(--space-2) 0 0;
-  color: var(--color-text-muted);
-}
+  .app__title {
+    font-size: 1.75rem;
+    letter-spacing: -0.02em;
+  }
 
-/* Listing beside the basket on wide screens, stacked below 60rem so the
-   basket does not squeeze the product columns on a phone. */
-.app__layout {
-  display: grid;
-  grid-template-columns: 1fr 20rem;
-  gap: var(--space-6);
-  align-items: start;
-}
+  .app__subtitle {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
 
-.app__listing {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  min-width: 0;
-}
-
-@media (max-width: 60rem) {
+  /* Listing beside the basket on wide screens, stacked below 60rem so the
+     basket does not squeeze the product columns on a phone. */
   .app__layout {
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: 1fr 20rem;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .app__listing {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+  }
+
+  @media (max-width: 60rem) {
+    .app__layout {
+      grid-template-columns: 1fr;
+    }
   }
 }

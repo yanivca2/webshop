@@ -94,7 +94,7 @@ function isBasketItems(value: unknown): value is BasketItems {
 // zustand hands us the already-parsed, already envelope-unwrapped persisted
 // value.
 const basketStorage: PersistStorage<PersistedBasket> = {
-  getItem: (name) => {
+  getItem: (name): StorageValue<PersistedBasket> | null => {
     try {
       const raw = window.localStorage.getItem(name);
       return raw === null ? null : (JSON.parse(raw) as StorageValue<PersistedBasket>);
@@ -102,7 +102,7 @@ const basketStorage: PersistStorage<PersistedBasket> = {
       return null;
     }
   },
-  setItem: (name, value) => {
+  setItem: (name, value): void => {
     try {
       window.localStorage.setItem(name, JSON.stringify(value));
     } catch {
@@ -110,7 +110,7 @@ const basketStorage: PersistStorage<PersistedBasket> = {
       // correct for this session; only persistence across reloads is lost.
     }
   },
-  removeItem: (name) => {
+  removeItem: (name): void => {
     try {
       window.localStorage.removeItem(name);
     } catch {
@@ -179,8 +179,8 @@ export const useBasketStore = create<BasketStoreState>()(
     {
       name: BASKET_STORAGE_KEY,
       storage: basketStorage,
-      partialize: (state) => ({ items: state.items }),
-      merge: (persisted, current) => {
+      partialize: (state): PersistedBasket => ({ items: state.items }),
+      merge: (persisted, current): BasketStoreState => {
         const candidate = (persisted as Partial<PersistedBasket> | null)?.items;
         return isBasketItems(candidate) ? { ...current, items: candidate } : current;
       },

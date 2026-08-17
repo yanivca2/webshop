@@ -1,9 +1,11 @@
 package com.example.api
 
 import jakarta.validation.ConstraintViolationException
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.web.ErrorResponse
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -21,6 +23,8 @@ data class ApiError(
  */
 @RestControllerAdvice
 class ApiExceptionHandler {
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     /** Query/path parameter validation, e.g. `@Size` on a request param. */
     @ExceptionHandler(ConstraintViolationException::class)
     fun handleParamValidation(ex: ConstraintViolationException): ResponseEntity<ApiError> {
@@ -74,6 +78,39 @@ class ApiExceptionHandler {
                     message = ex.message ?: "Not found",
                 ),
             )
+
+    /**
+     * The backstop: anything not handled above would otherwise leave through
+     * Spring's default error path, which answers in its own shape rather than
+     * [ApiError] - so a client parsing the contract finds no message to show.
+     *
+     * The message is deliberately generic. Whatever an unexpected exception
+     * says is written for us, not for a customer, and can name internals; the
+     * detail goes to the log instead, where the stack trace is worth having.
+     *
+     * Spring's own exceptions carry the status and body they are supposed to
+     * produce, so they are re-thrown rather than flattened - without this, a
+     * 404 for an unmapped URL or a 405 for the wrong method would come back
+     * as a 500.
+     */
+    @ExceptionHandler(Exception::class)
+    fun handleUnexpected(ex: Exception): ResponseEntity<ApiError> {
+        if (ex is ErrorResponse) {
+            throw ex
+        }
+
+        logger.error("Unhandled exception", ex)
+
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(
+                ApiError(
+                    status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    error = HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase,
+                    message = "Something went wrong. Please try again.",
+                ),
+            )
+    }
 
     private fun badRequest(message: String): ResponseEntity<ApiError> =
         ResponseEntity

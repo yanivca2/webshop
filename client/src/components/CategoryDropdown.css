@@ -1,165 +1,167 @@
-.category-dropdown {
-  position: relative;
-}
+@layer base {
+  .category-dropdown {
+    position: relative;
+  }
 
-.category-dropdown__button {
-  /* Named so the panel can hang off this button - see the end of the file. */
-  anchor-name: --category-dropdown-button;
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  width: 100%;
-  height: 2.5rem;
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  background-color: var(--color-surface);
-  color: var(--color-text);
-  cursor: pointer;
-}
+  .category-dropdown__button {
+    /* Named so the panel can hang off this button - see the end of the file. */
+    anchor-name: --category-dropdown-button;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    width: 100%;
+    height: 2.5rem;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+  }
 
-.category-dropdown__chevron {
-  color: var(--color-text-muted);
-}
+  .category-dropdown__chevron {
+    color: var(--color-text-muted);
+  }
 
-/* Offsets measured from the wrapper, for browsers without anchor positioning.
-   The @supports block at the end measures them from the button itself. */
-.category-dropdown__panel {
-  position: absolute;
-  z-index: 5;
-  top: calc(100% + var(--space-1));
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  width: 100%;
-  padding: var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  background-color: var(--color-surface);
-  box-shadow: var(--shadow);
-}
-
-/* Hides the category label for a cleaner look, while maintaining it
-   for the accessibility tree. */
-.category-dropdown__filter-label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-.category-dropdown__filter {
-  height: 2.25rem;
-  padding: var(--space-1) var(--space-2);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-}
-
-.category-dropdown__list {
-  max-height: 13rem;
-  overflow-y: auto;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.category-option {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
-.category-option:hover {
-  /* Using `background-image` with dynamic `linear-gradient` to keep element's
-     own background color with a tint for the hover state. */
-  background-image: linear-gradient(var(--tint-hover), var(--tint-hover));
-}
-
-.category-option__input {
-  width: 1rem;
-  height: 1rem;
-  accent-color: var(--color-accent);
-}
-
-.category-dropdown__empty {
-  margin: 0;
-  padding: var(--space-2);
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
-}
-
-/* The message keeps the muted treatment of the other placeholder lines, and
-   Retry sits under it rather than beside it so the panel's width never has to
-   grow to hold the pair. */
-.category-dropdown__failure {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: var(--space-1);
-  padding-bottom: var(--space-2);
-}
-
-.category-dropdown__retry {
-  margin-inline: var(--space-2);
-  padding: var(--space-1) var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.category-dropdown__actions {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-2);
-  padding-top: var(--space-2);
-  border-top: 1px solid var(--color-border);
-}
-
-.category-dropdown__clear,
-.category-dropdown__apply {
-  height: 2.25rem;
-  padding: var(--space-1) var(--space-4);
-  border-radius: var(--radius);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.category-dropdown__clear {
-  border: none;
-  background: none;
-  color: var(--color-accent);
-}
-
-.category-dropdown__apply {
-  border: none;
-  background-color: var(--color-accent);
-  color: var(--color-accent-contrast);
-}
-
-/* Where the browser has anchor positioning, the panel is placed against the
-   button itself rather than against the wrapper it happens to sit in, and it
-   takes its width from the button rather than from a box the two share. The
-   rules above stay as the fallback for browsers without it. */
-@supports (anchor-name: --a) {
+  /* Offsets measured from the wrapper, for browsers without anchor positioning.
+     The @supports block at the end measures them from the button itself. */
   .category-dropdown__panel {
-    position-anchor: --category-dropdown-button;
-    top: anchor(bottom);
-    left: anchor(left);
-    width: anchor-size(width);
-    margin-top: var(--space-1);
+    position: absolute;
+    z-index: 5;
+    top: calc(100% + var(--space-1));
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 100%;
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow);
+  }
+
+  /* Hides the category label for a cleaner look, while maintaining it
+     for the accessibility tree. */
+  .category-dropdown__filter-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .category-dropdown__filter {
+    height: 2.25rem;
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .category-dropdown__list {
+    max-height: 13rem;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .category-option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius);
+    cursor: pointer;
+  }
+
+  .category-option:hover {
+    /* Using `background-image` with dynamic `linear-gradient` to keep element's
+       own background color with a tint for the hover state. */
+    background-image: linear-gradient(var(--tint-hover), var(--tint-hover));
+  }
+
+  .category-option__input {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--color-accent);
+  }
+
+  .category-dropdown__empty {
+    margin: 0;
+    padding: var(--space-2);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  /* The message keeps the muted treatment of the other placeholder lines, and
+     Retry sits under it rather than beside it so the panel's width never has to
+     grow to hold the pair. */
+  .category-dropdown__failure {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: var(--space-1);
+    padding-bottom: var(--space-2);
+  }
+
+  .category-dropdown__retry {
+    margin-inline: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .category-dropdown__actions {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .category-dropdown__clear,
+  .category-dropdown__apply {
+    height: 2.25rem;
+    padding: var(--space-1) var(--space-4);
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .category-dropdown__clear {
+    border: none;
+    background: none;
+    color: var(--color-accent);
+  }
+
+  .category-dropdown__apply {
+    border: none;
+    background-color: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+
+  /* Where the browser has anchor positioning, the panel is placed against the
+     button itself rather than against the wrapper it happens to sit in, and it
+     takes its width from the button rather than from a box the two share. The
+     rules above stay as the fallback for browsers without it. */
+  @supports (anchor-name: --a) {
+    .category-dropdown__panel {
+      position-anchor: --category-dropdown-button;
+      top: anchor(bottom);
+      left: anchor(left);
+      width: anchor-size(width);
+      margin-top: var(--space-1);
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactElement } from 'react';
 import './CategoryDropdown.css';
 
 interface CategoryDropdownProps {
@@ -34,7 +34,7 @@ export default function CategoryDropdown({
   applied,
   onSelectionChange,
   onApply,
-}: CategoryDropdownProps) {
+}: CategoryDropdownProps): ReactElement {
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState('');
   // Applied categories are shown first, but the order changes only after the
@@ -44,6 +44,7 @@ export default function CategoryDropdown({
   const panelRef = useRef<HTMLDivElement>(null);
   const searchFieldRef = useRef<HTMLInputElement>(null);
   const searchFieldId = useId();
+  const panelId = useId();
 
   useEffect(() => {
     if (!isOpen) {
@@ -51,7 +52,7 @@ export default function CategoryDropdown({
     }
 
     // Closes the dialog when clicking outside of it.
-    function handlePointerDown(event: MouseEvent) {
+    function handlePointerDown(event: MouseEvent): void {
       const target = event.target;
       if (target instanceof Node && !panelRef.current?.contains(target)) {
         // Ignore clicks on the button, as this has its own handling.
@@ -71,12 +72,12 @@ export default function CategoryDropdown({
     }
   }, [isOpen]);
 
-  function close() {
+  function close(): void {
     setIsOpen(false);
     dropdownButtonRef.current?.focus();
   }
 
-  function toggleOpen() {
+  function toggleOpen(): void {
     if (isOpen) {
       close();
       return;
@@ -86,13 +87,13 @@ export default function CategoryDropdown({
     setIsOpen(true);
   }
 
-  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>): void {
     if (event.key === 'Escape') {
       close();
     }
   }
 
-  function toggleCategory(category: string) {
+  function toggleCategory(category: string): void {
     onSelectionChange(
       selected.includes(category)
         ? selected.filter((picked) => picked !== category)
@@ -100,19 +101,19 @@ export default function CategoryDropdown({
     );
   }
 
-  function handleApply() {
+  function handleApply(): void {
     onApply(selected);
     close();
   }
 
-  function handleClearSelection() {
+  function handleClearSelection(): void {
     onSelectionChange([]);
     onApply([]);
     // Allow the user to keep using the category filter.
     searchFieldRef.current?.focus();
   }
 
-  const byName = (a: string, b: string) => a.localeCompare(b);
+  const byName = (a: string, b: string): number => a.localeCompare(b);
   const ordered = [
     ...categories.filter((category) => leadingAtOpen.includes(category)).sort(byName),
     ...categories.filter((category) => !leadingAtOpen.includes(category)).sort(byName),
@@ -127,7 +128,7 @@ export default function CategoryDropdown({
         ref={dropdownButtonRef}
         className="category-dropdown__button"
         aria-expanded={isOpen}
-        aria-haspopup="dialog"
+        aria-controls={panelId}
         onClick={toggleOpen}
       >
         {dropdownButtonLabel(selected.length)}
@@ -137,10 +138,13 @@ export default function CategoryDropdown({
       </button>
 
       {isOpen && (
+        // A disclosure rather than a dialog: the panel is revealed by the
+        // button and follows it in the DOM, so a screen reader reaches it by
+        // simply moving on. `role="dialog"` would promise modality this does
+        // not have - nothing behind the panel is inert, and Tab leaves it.
         <div
           className="category-dropdown__panel"
-          role="dialog"
-          aria-label="Categories"
+          id={panelId}
           ref={panelRef}
           onKeyDown={handleKeyDown}
         >
@@ -156,7 +160,7 @@ export default function CategoryDropdown({
             value={filter}
             onChange={(event) => setFilter(event.target.value)}
             // This panel sits inside the filters form, where Enter in a text
-            // field would submit it and search behind the open dialog.
+            // field would submit it and search behind the open panel.
             onKeyDown={(event) => event.key === 'Enter' && event.preventDefault()}
           />
 

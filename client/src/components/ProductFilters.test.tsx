@@ -1,7 +1,7 @@
 import { focusManager, QueryClientProvider } from '@tanstack/react-query';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor, type RenderResult } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import App from '../App';
 import { createTestQueryClient, jsonResponse, testProduct } from '../test/renderWithProviders';
 
@@ -30,13 +30,13 @@ function api(url: string): Response {
   );
 }
 
-function stubApi() {
+function stubApi(): Mock<(input: RequestInfo | URL) => Promise<Response>> {
   const fetchMock = vi.fn((input: RequestInfo | URL) => Promise.resolve(api(String(input))));
   vi.stubGlobal('fetch', fetchMock);
   return fetchMock;
 }
 
-function stubApiThatNeverAnswers() {
+function stubApiThatNeverAnswers(): void {
   vi.stubGlobal(
     'fetch',
     // Not calling `resolve` to hold the call.
@@ -44,7 +44,7 @@ function stubApiThatNeverAnswers() {
   );
 }
 
-function stubApiWithAStuckRefetch() {
+function stubApiWithAStuckRefetch(): Mock<(input: RequestInfo | URL) => Promise<Response>> {
   const fetchMock = vi
     .fn((input: RequestInfo | URL) => Promise.resolve(api(String(input))))
     .mockResolvedValueOnce(jsonResponse(catalog))
@@ -54,9 +54,15 @@ function stubApiWithAStuckRefetch() {
   return fetchMock;
 }
 
+interface HangingApi {
+  fetchMock: Mock;
+  // Lets the held request answer, so the test controls when the wait ends.
+  release: () => void;
+}
+
 // Returns a mocked slow fetch call, with a trigger to release it.
-function stubApiThatHangs() {
-  let resolvePending: (value: Response) => void = () => {};
+function stubApiThatHangs(): HangingApi {
+  let resolvePending: (value: Response) => void = (): void => {};
   const pending = new Promise<Response>((resolve) => (resolvePending = resolve));
   const fetchMock = vi
     .fn()
@@ -64,13 +70,13 @@ function stubApiThatHangs() {
     .mockResolvedValueOnce(jsonResponse(['Audio', 'Laptops']))
     .mockReturnValue(pending);
   vi.stubGlobal('fetch', fetchMock);
-  return { fetchMock, release: () => resolvePending(jsonResponse([testProduct])) };
+  return { fetchMock, release: (): void => resolvePending(jsonResponse([testProduct])) };
 }
 
 // We want to check the actual user experience rather than callback values
 // wherever we can, so we mount the whole App component and test what it really
 // does.
-function renderApp() {
+function renderApp(): RenderResult {
   return render(
     <QueryClientProvider client={createTestQueryClient()}>
       <App />
@@ -78,28 +84,32 @@ function renderApp() {
   );
 }
 
-async function renderWithFullCatalog() {
+async function renderWithFullCatalog(): Promise<void> {
   renderApp();
   await screen.findByRole('heading', { name: SONY });
   expect(screen.getByRole('heading', { name: MACBOOK })).toBeInTheDocument();
 }
 
-function returnToTheTab() {
+function returnToTheTab(): void {
   act(() => {
     focusManager.setFocused(false);
     focusManager.setFocused(true);
   });
 }
 
-const searchField = () => screen.getByLabelText<HTMLInputElement>('Search products');
-const searchButton = () => screen.getByRole('button', { name: /Search|Searching/ });
-const clearAllButton = () => screen.getByRole('button', { name: 'Clear all filters' });
-const categorySelectorButton = () =>
+const searchField = (): HTMLInputElement =>
+  screen.getByLabelText<HTMLInputElement>('Search products');
+const searchButton = (): HTMLElement => screen.getByRole('button', { name: /Search|Searching/ });
+const clearAllButton = (): HTMLElement => screen.getByRole('button', { name: 'Clear all filters' });
+const categorySelectorButton = (): HTMLElement =>
   screen.getByRole('button', { name: /Select a category|categor(y|ies) selected/ });
-const categoryOption = (name: string) => screen.getByRole('checkbox', { name });
-const applySelectedCategories = () => screen.getByRole('button', { name: 'Apply' });
+const categoryOption = (name: string): HTMLElement => screen.getByRole('checkbox', { name });
+const applySelectedCategories = (): HTMLElement => screen.getByRole('button', { name: 'Apply' });
 
-async function selectCategory(user: ReturnType<typeof userEvent.setup>, name: string) {
+async function selectCategory(
+  user: ReturnType<typeof userEvent.setup>,
+  name: string,
+): Promise<void> {
   await user.click(categorySelectorButton());
   await user.click(categoryOption(name));
 }

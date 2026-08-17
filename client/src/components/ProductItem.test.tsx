@@ -3,9 +3,13 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useBasketStore } from '../basket/basketStore';
 import ProductItem from './ProductItem';
-import { renderWithProviders, testProduct } from '../test/renderWithProviders';
+import {
+  renderWithProviders,
+  testProduct,
+  type ProvidersRenderResult,
+} from '../test/renderWithProviders';
 
-function seedBasket(quantity: number) {
+function seedBasket(quantity: number): void {
   useBasketStore.setState({
     items: {
       [testProduct.id]: {
@@ -20,7 +24,7 @@ function seedBasket(quantity: number) {
   });
 }
 
-function renderItem(onOpenDetail = vi.fn()) {
+function renderItem(onOpenDetail = vi.fn()): ProvidersRenderResult {
   return renderWithProviders(
     <ul>
       <ProductItem product={testProduct} viewMode="cards" onOpenDetail={onOpenDetail} />
@@ -107,5 +111,4 @@ describe('ProductItem', () => {
 
     expect(await screen.findByText('No image')).toBeInTheDocument();
   });
-
 });

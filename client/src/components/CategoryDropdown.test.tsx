@@ -23,7 +23,12 @@ const CATEGORIES = [
 
 type Props = ComponentProps<typeof CategoryDropdown>;
 
-function renderDropdown(overrides: Partial<Props> = {}) {
+interface DropdownHarness extends Props {
+  // Re-renders with new props, for state that only settles across a render.
+  rerenderWith: (next: Partial<Props>) => void;
+}
+
+function renderDropdown(overrides: Partial<Props> = {}): DropdownHarness {
   const props: Props = {
     categories: CATEGORIES,
     isPending: false,
@@ -39,13 +44,17 @@ function renderDropdown(overrides: Partial<Props> = {}) {
 
   return {
     ...props,
-    rerenderWith: (next: Partial<Props>) =>
+    rerenderWith: (next: Partial<Props>): void =>
       view.rerender(<CategoryDropdown {...props} {...next} />),
   };
 }
 
-const categorySelector = () => screen.getByRole('button', { expanded: false });
-const listed = () => screen.getAllByRole('listitem').map((item) => item.textContent);
+const categorySelector = (): HTMLElement => screen.getByRole('button', { expanded: false });
+const listed = (): (string | null)[] =>
+  screen.getAllByRole('listitem').map((item) => item.textContent);
+// The panel is a disclosure, so its own filter field stands in for it being open.
+const openPanel = (): HTMLElement | null =>
+  screen.queryByRole('searchbox', { name: 'Filter categories' });
 
 describe('CategoryDropdown', () => {
   it('counts the selection on the selector before it is applied', () => {
@@ -144,7 +153,7 @@ describe('CategoryDropdown', () => {
     await user.click(screen.getByRole('button', { name: 'Apply' }));
 
     // Assert
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(openPanel()).not.toBeInTheDocument();
   });
 
   it('drops the categories from the query when Clear selection is pressed', async () => {
@@ -171,7 +180,7 @@ describe('CategoryDropdown', () => {
     await user.click(screen.getByRole('button', { name: 'Clear selection' }));
 
     // Assert
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(openPanel()).toBeInTheDocument();
   });
 
   it('closes on Escape and hands focus back to the selector', async () => {
@@ -184,7 +193,7 @@ describe('CategoryDropdown', () => {
     await user.keyboard('{Escape}');
 
     // Assert
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(openPanel()).not.toBeInTheDocument();
     expect(categorySelector()).toHaveFocus();
   });
 
@@ -198,7 +207,7 @@ describe('CategoryDropdown', () => {
     await user.click(document.body);
 
     // Assert
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(openPanel()).not.toBeInTheDocument();
   });
 
   it('says the categories are loading rather than showing an empty list', async () => {

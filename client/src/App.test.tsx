@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
 import { createTestQueryClient, testProduct } from './test/renderWithProviders';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { render } from '@testing-library/react';
+import { render, type RenderResult } from '@testing-library/react';
 
 const products = [testProduct, { ...testProduct, id: '2', name: 'MacBook Air', category: 'Laptops' }];
 
@@ -15,7 +15,7 @@ function routeFetch(url: string): Response {
   });
 }
 
-function renderApp() {
+function renderApp(): RenderResult {
   const queryClient = createTestQueryClient();
   return render(
     <QueryClientProvider client={queryClient}>

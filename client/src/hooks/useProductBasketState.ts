@@ -8,7 +8,16 @@ import type { Product } from '../types/api';
  * product's own id, rather than reading the whole basket, is what keeps
  * adding one product from re-rendering every other product on screen.
  */
-export function useProductBasketState(product: Product) {
+export interface ProductBasketState {
+  quantityInBasket: number;
+  add: (product: Product) => void;
+  /** True when the catalog holds none of this product at all. */
+  isOutOfStock: boolean;
+  /** True when the basket already holds every one the catalog has. */
+  atStockLimit: boolean;
+}
+
+export function useProductBasketState(product: Product): ProductBasketState {
   const quantityInBasket = useBasketStore((state) => state.items[product.id]?.quantity ?? 0);
   const add = useBasketStore((state) => state.add);
   const isOutOfStock = product.stock === 0;

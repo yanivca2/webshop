@@ -2,6 +2,7 @@ package com.example.api
 
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Size
 import java.time.Instant
@@ -14,6 +15,7 @@ import java.time.Instant
  * change what a customer is charged.
  */
 data class PurchaseItemRequest(
+    @field:NotBlank(message = "must not be blank")
     @field:Size(max = Product.MAX_ID_LENGTH, message = "must be ${Product.MAX_ID_LENGTH} characters or fewer")
     val productId: String,
     @field:Min(value = MIN_QUANTITY, message = "must be at least $MIN_QUANTITY")
@@ -26,9 +28,16 @@ data class PurchaseItemRequest(
 
 data class PurchaseRequest(
     @field:NotEmpty(message = "must contain at least one item")
+    // An upper bound as well as a lower one: without it a single request can
+    // ask the server to price an unbounded number of lines.
+    @field:Size(max = MAX_ITEMS, message = "must contain at most $MAX_ITEMS items")
     @field:Valid
     val items: List<PurchaseItemRequest>,
-)
+) {
+    private companion object {
+        const val MAX_ITEMS = 100
+    }
+}
 
 /** A priced line, resolved server-side. */
 data class PurchaseLineResponse(

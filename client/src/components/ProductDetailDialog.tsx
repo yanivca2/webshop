@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ReactElement } from 'react';
 import { useBasketStore } from '../basket/basketStore';
 import { useProduct } from '../hooks/useProduct';
 import { formatPrice } from '../lib/money';
@@ -10,7 +10,10 @@ interface ProductDetailDialogProps {
   onClose: () => void;
 }
 
-export default function ProductDetailDialog({ productId, onClose }: ProductDetailDialogProps) {
+export default function ProductDetailDialog({
+  productId,
+  onClose,
+}: ProductDetailDialogProps): ReactElement {
   const dialogRef = useRef<HTMLDialogElement>(null);
   // productId can be null (dialog closed); '' never matches a real product id,
   // so the lookup just misses instead of needing a branch for the null case.
@@ -47,7 +50,7 @@ export default function ProductDetailDialog({ productId, onClose }: ProductDetai
       return;
     }
 
-    const handleClose = () => onClose();
+    const handleClose = (): void => onClose();
     dialog.addEventListener('close', handleClose);
     return () => dialog.removeEventListener('close', handleClose);
   }, [onClose]);

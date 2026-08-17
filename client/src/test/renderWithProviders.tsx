@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, type RenderOptions } from '@testing-library/react';
+import { render, type RenderOptions, type RenderResult } from '@testing-library/react';
 import type { ReactElement, ReactNode } from 'react';
 import type { Product } from '../types/api';
 
@@ -16,10 +16,18 @@ export function createTestQueryClient(): QueryClient {
   });
 }
 
-export function renderWithProviders(ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) {
+export interface ProvidersRenderResult extends RenderResult {
+  /** The client backing this render, so a test can seed or inspect the cache. */
+  queryClient: QueryClient;
+}
+
+export function renderWithProviders(
+  ui: ReactElement,
+  options?: Omit<RenderOptions, 'wrapper'>,
+): ProvidersRenderResult {
   const queryClient = createTestQueryClient();
 
-  function Wrapper({ children }: { children: ReactNode }) {
+  function Wrapper({ children }: { children: ReactNode }): ReactElement {
     return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
   }
 

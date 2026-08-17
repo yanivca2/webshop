@@ -12,11 +12,13 @@ function readStoredViewMode(): ViewMode {
   }
 }
 
+export type ViewModeState = [ViewMode, (mode: ViewMode) => void];
+
 /** The chosen product view mode (cards or list), persisted across reloads. */
-export function useViewMode(): [ViewMode, (mode: ViewMode) => void] {
+export function useViewMode(): ViewModeState {
   const [viewMode, setViewModeState] = useState<ViewMode>(readStoredViewMode);
 
-  function setViewMode(mode: ViewMode) {
+  function setViewMode(mode: ViewMode): void {
     setViewModeState(mode);
     try {
       window.localStorage.setItem(STORAGE_KEY, mode);

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, type ReactElement } from 'react';
 import { useBasketItemList, useBasketStore } from '../basket/basketStore';
 import { usePurchase } from '../hooks/usePurchase';
 import { formatPrice, sumLineTotals } from '../lib/money';
@@ -10,7 +10,7 @@ import './BasketPanel.css';
 // The jump button links to this, so the two read it from one place.
 const BASKET_ELEMENT_ID = 'basket';
 
-export default function BasketPanel() {
+export default function BasketPanel(): ReactElement {
   const items = useBasketItemList();
   const itemCount = items.reduce((count, item) => count + item.quantity, 0);
   const totalMinorUnits = sumLineTotals(items);
@@ -24,21 +24,37 @@ export default function BasketPanel() {
   // submitting for the confirmation to be able to compare against it.
   const submittedTotalMinorUnits = useRef(0);
 
-  const handlePurchase = () => {
+  const handlePurchase = (): void => {
     submittedTotalMinorUnits.current = totalMinorUnits;
     purchase.mutate(items, {
-      onSuccess: () => clear(),
+      onSuccess: (): void => clear(),
     });
   };
 
-  const handleContinue = () => {
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  // Set on the way out of the confirmation, read once the basket is back:
+  // "Continue shopping" unmounts itself, so the focus it holds has to be
+  // handed somewhere rather than dropped on <body>.
+  const returningFromConfirmation = useRef(false);
+
+  const handleContinue = (): void => {
+    returningFromConfirmation.current = true;
     purchase.reset();
   };
+
+  useEffect(() => {
+    if (returningFromConfirmation.current && !purchase.isSuccess) {
+      returningFromConfirmation.current = false;
+      titleRef.current?.focus();
+    }
+  }, [purchase.isSuccess]);
 
   if (purchase.isSuccess && purchase.data) {
     return (
       <aside className="basket" id={BASKET_ELEMENT_ID} aria-label="Basket">
-        <h2 className="basket__title">Basket</h2>
+        <h2 className="basket__title" ref={titleRef} tabIndex={-1}>
+          Basket
+        </h2>
         <PurchaseConfirmation
           order={purchase.data}
           expectedTotalMinorUnits={submittedTotalMinorUnits.current}
@@ -51,7 +67,7 @@ export default function BasketPanel() {
 
   return (
     <aside className="basket" id={BASKET_ELEMENT_ID} aria-label="Basket">
-      <h2 className="basket__title">
+      <h2 className="basket__title" ref={titleRef} tabIndex={-1}>
         Basket
         {itemCount > 0 ? <span className="basket__count">{itemCount}</span> : null}
       </h2>

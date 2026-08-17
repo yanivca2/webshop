@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactElement } from 'react';
 import { useProductBasketState } from '../hooks/useProductBasketState';
 import type { ViewMode } from '../hooks/useViewMode';
 import { formatPrice } from '../lib/money';
@@ -22,7 +22,11 @@ interface ProductItemProps {
  * One product from the product grid. Different view modes are defined using
  * only-CSS.
  */
-export default function ProductItem({ product, viewMode, onOpenDetail }: ProductItemProps) {
+export default function ProductItem({
+  product,
+  viewMode,
+  onOpenDetail,
+}: ProductItemProps): ReactElement {
   const [imageFailed, setImageFailed] = useState(false);
   const { quantityInBasket, add, isOutOfStock, atStockLimit } = useProductBasketState(product);
 

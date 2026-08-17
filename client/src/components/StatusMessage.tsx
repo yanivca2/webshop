@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react';
 import './StatusMessage.css';
 
 interface StatusMessageProps {
@@ -13,7 +14,7 @@ export default function StatusMessage({
   detail,
   tone = 'info',
   onRetry,
-}: StatusMessageProps) {
+}: StatusMessageProps): ReactElement {
   return (
     <div
       className={`status status--${tone}`}
